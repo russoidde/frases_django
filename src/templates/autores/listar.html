@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block titulo %}
+    Listado de autores
+{% endblock titulo %}
+
+{% block contenido %}
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Detalle</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Apellido</th>
+            <th scope="col">Nacionalidad</th>
+            <th scope="col">Nacimiento</th>
+            <th scope="col">Fallecimiento</th>
+            <th scope="col">Activo</th>
+            <th scope="col">Modificar</th>
+            <th scope="col">Borrar</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Usamos object_list (o 'autores' si agregaste context_object_name en views.py) -->
+        {% for autor in object_list %}
+            <tr>
+                <th scope="row">
+                    <a href="{% url 'autores:detalle' autor.id %}">
+                        <img src="{% static 'img/info.png' %}" width="32px">
+                    </a>
+                </th>
+
+                <td>{{ autor.nombre }}</td>
+                <td>{{ autor.apellido }}</td>
+                <td>{{ autor.nacionalidad }}</td>
+                <td>{{ autor.fecha_nac }}</td>
+                <td>{{ autor.fecha_fall }}</td>
+
+                <td>
+                    <a href="{% url 'autores:modificar_activo' autor.id %}">
+                        <!-- Cambiado a autor.visible -->
+                        {% if autor.visible %}
+                            <img src="{% static 'img/check.svg' %}" alt="si" width="32px">
+                        {% else %}
+                            <img src="{% static 'img/nocheck.svg' %}" alt="no" width="32px">
+                        {% endif %}
+                    </a>
+                </td>
+
+                <td>
+                    <!-- Cambiado autor.id por autor.pk -->
+                    <a href="{% url 'autores:modificar' autor.pk %}">
+                        <img src="{% static 'img/edit.png' %}" alt="modificar" width="32px">
+                    </a>
+                </td>
+
+                <td>
+                    <!-- Cambiado autor.id por autor.pk -->
+                    <a href="{% url 'autores:borrar' autor.pk %}">
+                        <img src="{% static 'img/borrar.svg' %}" alt="borrar" width="32px">
+                    </a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="9" class="text-center">No hay autores registrados.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock contenido %}
